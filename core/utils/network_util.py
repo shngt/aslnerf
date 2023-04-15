@@ -98,7 +98,7 @@ SMPLH_PARENT = {1: 0, 2: 0, 3: 0, 4: 1, 5: 2, 6: 3, 7: 4, 8: 5, 9: 6, 10: 7, 11:
 class MotionBasisComputer(nn.Module):
     r"""Compute motion bases between the target pose and canonical pose."""
 
-    def __init__(self, total_bones=24):
+    def __init__(self, total_bones=52):
         super(MotionBasisComputer, self).__init__()
         self.total_bones = total_bones
 

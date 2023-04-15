@@ -137,7 +137,7 @@ class Dataset(torch.utils.data.Dataset):
 
         # load t-pose
         dst_bbox = self.canonical_bbox.copy()
-        dst_poses = np.zeros(72, dtype='float32')
+        dst_poses = np.zeros(156, dtype='float32')
         dst_skel_joints = self.canonical_joints.copy()
 
         # rotate body

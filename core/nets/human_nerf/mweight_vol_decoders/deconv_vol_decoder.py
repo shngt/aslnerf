@@ -6,7 +6,7 @@ from core.utils.network_util import ConvDecoder3D
 
 
 class MotionWeightVolumeDecoder(nn.Module):
-    def __init__(self, embedding_size=256, volume_size=32, total_bones=24):
+    def __init__(self, embedding_size=256, volume_size=32, total_bones=52):
         super(MotionWeightVolumeDecoder, self).__init__()
 
         self.total_bones = total_bones

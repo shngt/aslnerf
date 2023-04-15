@@ -111,7 +111,7 @@ tpose:
 ## Misc
 
 sex: 'neutral'
-total_bones: 24
+total_bones: 52
 bbox_offset: 0.3
 
 load_net: latest
