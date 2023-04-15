@@ -9,7 +9,7 @@ from tqdm import tqdm
 
 from pathlib import Path
 sys.path.append(str(Path(os.getcwd()).resolve().parents[1]))
-from third_parties.smpl.smpl_numpy import SMPL
+from third_parties.smplh.smplh_numpy import SMPLH
 
 from absl import app
 from absl import flags
@@ -19,7 +19,7 @@ flags.DEFINE_string('cfg',
                     'wild.yaml',
                     'the path of config file')
 
-MODEL_DIR = '../../third_parties/smpl/models'
+MODEL_DIR = '../../third_parties/smplh/models'
 
 
 def parse_config():
@@ -44,7 +44,7 @@ def main(argv):
     with open(os.path.join(subject_dir, 'metadata.json'), 'r') as f:
         frame_infos = json.load(f)
 
-    smpl_model = SMPL(sex=sex, model_dir=MODEL_DIR)
+    smplh_model = SMPLH(sex=sex, model_dir=MODEL_DIR)
 
     cameras = {}
     mesh_infos = {}
@@ -62,7 +62,7 @@ def main(argv):
         # Below we tranfer the global body rotation to camera pose
 
         # Get T-pose joints
-        _, tpose_joints = smpl_model(np.zeros_like(poses), betas)
+        _, tpose_joints = smplh_model(np.zeros_like(poses), betas)
 
         # get global Rh, Th
         pelvis_pos = tpose_joints[0].copy()
@@ -76,7 +76,7 @@ def main(argv):
         poses[:3] = 0
 
         # get posed joints using body poses without global rotation
-        _, joints = smpl_model(poses, betas)
+        _, joints = smplh_model(poses, betas)
         joints = joints - pelvis_pos[None, :]
 
         mesh_infos[frame_base_name] = {
@@ -102,8 +102,8 @@ def main(argv):
 
     # write canonical joints
     avg_betas = np.mean(np.stack(all_betas, axis=0), axis=0)
-    smpl_model = SMPL(sex, model_dir=MODEL_DIR)
-    _, template_joints = smpl_model(np.zeros(72), avg_betas)
+    smplh_model = SMPLH(sex, model_dir=MODEL_DIR)
+    _, template_joints = smplh_model(np.zeros(156), avg_betas)
     with open(os.path.join(output_path, 'canonical_joints.pkl'), 'wb') as f:   
         pickle.dump(
             {
