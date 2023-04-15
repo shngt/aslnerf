@@ -96,3 +96,5 @@ class SMPLH():
         v = np.matmul(T, rest_shape_h[:, :, None])[:, :3, 0]
         
         return v, joints
+
+# test = SMPLH('male', '/home/philip/aslnerf/third_parties/smplh/models')

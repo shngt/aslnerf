@@ -2,22 +2,22 @@ from math import cos, sin
 
 import numpy as np
 
-SMPL_JOINT_IDX = {
-    'pelvis_root': 0,
+SMPLH_JOINT_IDX = {   
+    'pelvis': 0,
     'left_hip': 1,
     'right_hip': 2,
-    'belly_button': 3,
+    'spine1': 3,
     'left_knee': 4,
     'right_knee': 5,
-    'lower_chest': 6,
+    'spine2': 6,
     'left_ankle': 7,
     'right_ankle': 8,
-    'upper_chest': 9,
-    'left_toe': 10,
-    'right_toe': 11,
+    'spine3': 9,
+    'left_foot': 10,
+    'right_foot': 11,
     'neck': 12,
-    'left_clavicle': 13,
-    'right_clavicle': 14,
+    'left_collar': 13,
+    'right_collar': 14,
     'head': 15,
     'left_shoulder': 16,
     'right_shoulder': 17,
@@ -25,20 +25,49 @@ SMPL_JOINT_IDX = {
     'right_elbow': 19,
     'left_wrist': 20,
     'right_wrist': 21,
-    'left_thumb': 22,
-    'right_thumb': 23
+    'left_index1': 22,
+    'left_index2': 23,
+    'left_index3': 24,
+    'left_middle1': 25,
+    'left_middle2': 26,
+    'left_middle3': 27,
+    'left_pinky1': 28,
+    'left_pinky2': 29,
+    'left_pinky3': 30,
+    'left_ring1': 31,
+    'left_ring2': 32,
+    'left_ring3': 33,
+    'left_thumb1': 34,
+    'left_thumb2': 35,
+    'left_thumb3': 36,
+    'right_index1': 37,
+    'right_index2': 38,
+    'right_index3': 39,
+    'right_middle1': 40,
+    'right_middle2': 41,
+    'right_middle3': 42,
+    'right_pinky1': 43,
+    'right_pinky2': 44,
+    'right_pinky3': 45,
+    'right_ring1': 46,
+    'right_ring2': 47,
+    'right_ring3': 48,
+    'right_thumb1': 49,
+    'right_thumb2': 50,
+    'right_thumb3': 51
 }
 
-SMPL_PARENT = {
-    1: 0, 2: 0, 3: 0, 4: 1, 5: 2, 6: 3, 7: 4, 8: 5, 9: 6, 10: 7, 
-    11: 8, 12: 9, 13: 9, 14: 9, 15: 12, 16: 13, 17: 14, 18: 16, 19: 17, 20: 18, 
-    21: 19, 22: 20, 23: 21}
+SMPLH_PARENT = {1: 0, 2: 0, 3: 0, 4: 1, 5: 2, 6: 3, 7: 4, 8: 5, 9: 6, 10: 7, 11: 8, 12: 9, 
+    13: 9, 14: 9, 15: 12, 16: 13, 17: 14, 18: 16, 19: 17, 20: 18, 21: 19, 22: 20, 23: 22, 
+    24: 23, 25: 20, 26: 25, 27: 26, 28: 20, 29: 28, 30: 29, 31: 20, 32: 31, 33: 32, 34: 20, 
+    35: 34, 36: 35, 37: 21, 38: 37, 39: 38, 40: 21, 41: 40, 42: 41, 43: 21, 44: 43, 45: 44, 
+    46: 21, 47: 46, 48: 47, 49: 21, 50: 49, 51: 50}
 
 TORSO_JOINTS_NAME = [
-    'pelvis_root', 'belly_button', 'lower_chest', 'upper_chest', 'left_clavicle', 'right_clavicle'
+    'pelvis', 'spine1', 'spine2', 'spine3', 'left_collar', 'right_collar'
 ]
 TORSO_JOINTS = [
-    SMPL_JOINT_IDX[joint_name] for joint_name in TORSO_JOINTS_NAME
+    SMPLH_JOINT_IDX[joint_name] for joint_name in TORSO_JOINTS_NAME
 ]
 BONE_STDS = np.array([0.03, 0.06, 0.03])
 HEAD_STDS = np.array([0.06, 0.06, 0.06])
@@ -243,7 +272,7 @@ def body_pose_to_body_RTs(jangles, tpose_joints):
 
     for i in range(1, total_joints):
         Rs[i] = _rvec_to_rmtx(jangles[i,:])
-        Ts[i] = tpose_joints[i,:] - tpose_joints[SMPL_PARENT[i], :]
+        Ts[i] = tpose_joints[i,:] - tpose_joints[SMPLH_PARENT[i], :]
     
     return Rs, Ts
 
@@ -264,8 +293,8 @@ def get_canonical_global_tfms(canonical_joints):
     gtfms[0] = _construct_G(np.eye(3), canonical_joints[0,:])
 
     for i in range(1, total_bones):
-        translate = canonical_joints[i,:] - canonical_joints[SMPL_PARENT[i],:]
-        gtfms[i] = gtfms[SMPL_PARENT[i]].dot(
+        translate = canonical_joints[i,:] - canonical_joints[SMPLH_PARENT[i],:]
+        gtfms[i] = gtfms[SMPLH_PARENT[i]].dot(
                             _construct_G(np.eye(3), translate))
 
     return gtfms
@@ -299,7 +328,7 @@ def approx_gaussian_bone_volumes(
         gaussian_volume = np.zeros(shape=grid_shape, dtype='float32')
 
         is_parent_joint = False
-        for bone_idx, parent_idx in SMPL_PARENT.items():
+        for bone_idx, parent_idx in SMPLH_PARENT.items():
             if joint_idx != parent_idx:
                 continue
 
@@ -308,7 +337,7 @@ def approx_gaussian_bone_volumes(
                 S[0][0] *= 1/1.5
                 S[2][2] *= 1/1.5
 
-            start_joint = tpose_joints[SMPL_PARENT[bone_idx]]
+            start_joint = tpose_joints[SMPLH_PARENT[bone_idx]]
             end_joint = tpose_joints[bone_idx]
             target_bone = (end_joint - start_joint)[None, :]
 
@@ -327,7 +356,7 @@ def approx_gaussian_bone_volumes(
 
         if not is_parent_joint:
             # The joint is not other joints' parent, meaning it is an end joint
-            joint_stds = HEAD_STDS if joint_idx == SMPL_JOINT_IDX['head'] else JOINT_STDS
+            joint_stds = HEAD_STDS if joint_idx == SMPLH_JOINT_IDX['head'] else JOINT_STDS
             S = _std_to_scale_mtx(joint_stds * 2.)
 
             center = tpose_joints[joint_idx]
