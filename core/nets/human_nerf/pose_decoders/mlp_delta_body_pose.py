@@ -6,7 +6,7 @@ from configs import cfg
 
 class BodyPoseRefiner(nn.Module):
     def __init__(self,
-                 embedding_size=69,
+                 embedding_size=153,
                  mlp_width=256,
                  mlp_depth=4,
                  **_):
@@ -33,6 +33,7 @@ class BodyPoseRefiner(nn.Module):
         self.rodriguez = RodriguesModule()
 
     def forward(self, pose_input):
+        print(pose_input)
         rvec = self.block_mlps(pose_input).view(-1, 3)
         Rs = self.rodriguez(rvec).view(-1, self.total_bones, 3, 3)
         

@@ -42,8 +42,6 @@ class SMPLH():
         self.J = None
         self.R = None
 
-        import pdb; pdb.set_trace()
-
     def __call__(self, pose, beta):
 
         v_template = self.v_template              # (6890, 3)

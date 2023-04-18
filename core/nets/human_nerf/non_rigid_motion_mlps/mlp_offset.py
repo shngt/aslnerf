@@ -7,7 +7,7 @@ from core.utils.network_util import initseq
 class NonRigidMotionMLP(nn.Module):
     def __init__(self,
                  pos_embed_size=3, 
-                 condition_code_size=69,
+                 condition_code_size=153,
                  mlp_width=128,
                  mlp_depth=6,
                  skips=None):

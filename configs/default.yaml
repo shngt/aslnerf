@@ -36,7 +36,7 @@ mweight_volume:
 # non-rigid motion mlp
 non_rigid_motion_mlp:
   module: 'core.nets.human_nerf.non_rigid_motion_mlps.mlp_offset'
-  condition_code_size: 69
+  condition_code_size: 153
   mlp_width: 128
   mlp_depth: 6
   skips: [4]
@@ -48,7 +48,7 @@ non_rigid_motion_mlp:
 # pose decoder
 pose_decoder:
   module: 'core.nets.human_nerf.pose_decoders.mlp_delta_body_pose'
-  embedding_size: 69
+  embedding_size: 153
   mlp_width: 256
   mlp_depth: 4
 
@@ -58,10 +58,10 @@ pose_decoder:
 
 train_keyfilter: ['rays',
                   'motion_bases', 'motion_weights_priors',
-                  'cnl_bbox', 'dst_posevec_69']
+                  'cnl_bbox', 'dst_posevec_153']
 test_keyfilter: ['rays', 'target_rgbs', 
                  'motion_bases', 'motion_weights_priors',
-                  'cnl_bbox', 'dst_posevec_69']
+                  'cnl_bbox', 'dst_posevec_153']
 
 train:
   perturb: 1.        # only for training, set to 0. for no jitter, 1. for jitter

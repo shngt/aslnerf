@@ -250,12 +250,12 @@ class Dataset(torch.utils.data.Dataset):
             })
             assert np.all(results['cnl_bbox_scale_xyz'] >= 0)
 
-        if 'dst_posevec_69' in self.keyfilter:
+        if 'dst_posevec_153' in self.keyfilter:
             # 1. ignore global orientation
             # 2. add a small value to avoid all zeros
-            dst_posevec_69 = dst_poses[3:] + 1e-2
+            dst_posevec_153 = dst_poses[3:] + 1e-2
             results.update({
-                'dst_posevec': dst_posevec_69,
+                'dst_posevec': dst_posevec_153,
             })
 
 
