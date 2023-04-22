@@ -3,7 +3,7 @@
 SUBJECT=$1
 if [ -z "${SUBJECT}" ]
 then
-    SUBJECT=monocular
+    SUBJECT=sample3F_176
 fi
 
 python run.py \

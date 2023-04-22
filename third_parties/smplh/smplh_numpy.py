@@ -5,8 +5,8 @@ import pickle
 
 from cv2 import Rodrigues as rodrigues
 
-MALE_PATH    = "SMPLH_male.pkl"
-FEMALE_PATH  = "SMPLH_female.pkl"
+MALE_PATH    = "SMPLH_MALE.pkl"
+FEMALE_PATH  = "SMPLH_FEMALE.pkl"
 NEUTRAL_PATH = MALE_PATH # SMPL-H neutral is not available
 
 

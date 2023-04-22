@@ -69,6 +69,15 @@ TORSO_JOINTS_NAME = [
 TORSO_JOINTS = [
     SMPLH_JOINT_IDX[joint_name] for joint_name in TORSO_JOINTS_NAME
 ]
+HAND_JOINTS_NAME = [
+    'left_index1', 'left_index2', 'left_index3', 'left_middle1', 'left_middle2', 'left_middle3', 'left_pinky1', 'left_pinky2', 
+    'left_pinky3', 'left_ring1', 'left_ring2', 'left_ring3', 'left_thumb1', 'left_thumb2', 'left_thumb3', 'right_index1', 
+    'right_index2', 'right_index3', 'right_middle1', 'right_middle2', 'right_middle3', 'right_pinky1', 'right_pinky2', 
+    'right_pinky3', 'right_ring1', 'right_ring2', 'right_ring3', 'right_thumb1', 'right_thumb2', 'right_thumb3'
+]
+HAND_JOINTS = [
+    SMPLH_JOINT_IDX[joint_name] for joint_name in HAND_JOINTS_NAME
+]
 BONE_STDS = np.array([0.03, 0.06, 0.03])
 HEAD_STDS = np.array([0.06, 0.06, 0.06])
 JOINT_STDS = np.array([0.02, 0.02, 0.02])
@@ -336,6 +345,9 @@ def approx_gaussian_bone_volumes(
             if joint_idx in TORSO_JOINTS:
                 S[0][0] *= 1/1.5
                 S[2][2] *= 1/1.5
+            elif joint_idx in HAND_JOINTS:
+                S[0][0] *= 1.5
+                S[2][2] *= 1.5
 
             start_joint = tpose_joints[SMPLH_PARENT[bone_idx]]
             end_joint = tpose_joints[bone_idx]

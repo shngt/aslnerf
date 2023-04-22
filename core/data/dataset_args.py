@@ -23,14 +23,15 @@ class DatasetArgs(object):
 
 
     if cfg.category == 'human_nerf' and cfg.task == 'wild':
+        sub = cfg.subject
         dataset_attrs.update({
-            "monocular_train": {
-                "dataset_path": 'dataset/wild/monocular',
+            f"{sub}_train": {
+                "dataset_path": f"dataset/wild/{sub}",
                 "keyfilter": cfg.train_keyfilter,
                 "ray_shoot_mode": cfg.train.ray_shoot_mode,
             },
-            "monocular_test": {
-                "dataset_path": 'dataset/wild/monocular',  
+            f"{sub}_test": {
+                "dataset_path": f"dataset/wild/{sub}",  
                 "keyfilter": cfg.test_keyfilter,
                 "ray_shoot_mode": 'image',
                 "src_type": 'wild'
